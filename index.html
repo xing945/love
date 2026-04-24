@@ -54,7 +54,21 @@
             /*3D的环境*/
             /*transition:2s;动画过渡*/
             /*transform-origin:50% 50% -25px;旋转中心*/
-            transform: translateX(50px) translateY(108px) translateZ(50px);
+            -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            
+            /* 添加抗锯齿和渲染优化 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            
+            /* 强制GPU加速 */
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            
+            /* 修复z-index问题 */
+            transform: translateX(50px) translateY(108px) translateZ(50px) rotateX(0.01deg) rotateY(0.01deg);
         }
 
         #cube div {
