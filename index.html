@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="m.dongpi.com">
+    <!--描述-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!--缩屏-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>title</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: black;
+            background-color: #000;
+            overflow: hidden;
+            perspective: 1000px;
+            /*景深：视角*/
+        }
+
+        canvas{
+            position: absolute;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+        }
+
+        .ds-no {
+            display: none;
+        }
+
+        .ds-black {
+            display: block;
+        }
+
+        #cube {
+            width: 300px;
+            height: 300px;
+            margin: 150px auto;
+            /*border:1px solid blue;*/
+            position: relative;
+            transform-style: preserve-3d;
+            /*3D的环境*/
+            /*transition:2s;动画过渡*/
+            /*transform-origin:50% 50% -25px;旋转中心*/
+            transform: translateX(50px) translateY(108px) translateZ(50px);
+        }
+
+        #cube div {
+            /*混合选择器*/
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ccc;
+            position: absolute;
+        }
+
+        #cube div:nth-child(1) {
+            top: 100px;
+            /*旋转中心：x方向 y方向 z方向*/
+            /*transform-origin:50% 50% 0;*/
+            transform-origin: top;
+            /*css3属性：围绕X轴顺时针旋转90度*/
+            transform: rotateX(-90deg)
+        }
+
+        #cube div:nth-child(2) {
+            top: 0px;
+            transform-origin: top;
+            transform: rotateX(-90deg)
+        }
+
+        #cube div:nth-child(3) {
+            left: -100px;
+            transform-origin: right;
+            transform: rotateY(-90deg)
+        }
+
+        #cube div:nth-child(4) {
+            right: 100px;
+            transform-origin: left;
+            transform: rotateY(90deg)
+        }
+
+        #cube div:nth-child(5) {}
+
+        #cube div:nth-child(6) {
+            /*css3变换：沿着z轴做移动*/
+            transform: translateZ(-100px);
+        }
+
+        /*#cube:hover{css动态伪类
+         transform:rotateY(360deg);
+    }*/
+
+
+        #heart3D {
+            width: 200px;
+            height: 320px;
+            margin: auto;
+            transform-style: preserve-3d;
+            /*设置为3D环境*/
+            /*css3自定义动画：动画的名称 时间 匀速运动  无限重复*/
+            animation: rot 10s linear infinite;
+            position: relative;
+        }
+
+        /*css3动画关键帧*/
+        @keyframes rot {
+            from {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+
+            to {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        #heart3D div.heart {
+            width: 200px;
+            height: 320px;
+            border: 1px solid red;
+            border-left: 0;
+            /*0|none 推荐用0，因为低版本的ie不兼容none*/
+            border-bottom: 0;
+            border-radius: 50% 50% 0/50% 40% 0;
+            /*圆角属性*/
+            /*transform:rotate(45deg);*/
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #cube div img {
+            width: 100px;
+            height: 100px;
+        }
+    /* Embedded girly region styles */
+    #girly-embed { width: 100%; max-width: 720px; height: 420px; margin: 20px auto; border-radius: 16px; overflow: hidden; position: relative; background: radial-gradient(circle at 20% -10%, rgba(255, 122, 183, .5), transparent 40%), radial-gradient(circle at 80% 0, rgba(255, 180, 210, .25), transparent 40%), linear-gradient(135deg, #2b0a1e 0%, #0b0b14 60%, #0b0b14 100%); box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+    #girly-embed .header { text-align:center; padding:8px 12px; color:#fff; font-weight:600; }
+    #girly-heart-zone { position:absolute; left:0; right:0; top:40px; bottom:0; pointer-events:auto; }
+    .girly-message { position:absolute; left:50%; top:18%; transform:translateX(-50%); background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); color:#fff; padding:18px 22px; border-radius:12px; backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%); box-shadow: 0 6px 24px rgba(0,0,0,.5); max-width:86%; text-align:center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    .girly-message .main { font-size:18px; line-height:1.4; margin-bottom:8px; font-weight:600; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+    .girly-message .sub { font-size:13px; opacity:.9; color: #ffd9ec; }
+    .girly-message .hint { margin-top:10px; font-size:12px; color:#ffd1e8; opacity:.85 }
+    .girly-message .next-btn { display:inline-block; margin-top:10px; background:linear-gradient(90deg,#ff7ab7,#ffd1e8); color:#60102b; border-radius:999px; padding:6px 10px; font-weight:700; cursor:pointer; box-shadow: 0 4px 12px rgba(255,122,183,.12); }
+    @keyframes embedFloatHeart { 0% { transform: translateY(0) translateX(0) scale(0.9); opacity:0; } 15% { opacity:1; } 100% { transform: translateY(-520px) translateX(var(--dx)); opacity:0; } }
+    
+    /* 新增的感动人文字样式 */
+    .heart-messages-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+    }
+    
+    .heart-message {
+        position: absolute;
+        background: linear-gradient(135deg, rgba(255, 122, 183, 0.3), rgba(255, 180, 210, 0.2));
+        color: white;
+        padding: 12px 18px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        max-width: 280px;
+        line-height: 1.5;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 6px 20px rgba(255, 122, 183, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: floatIn 0.8s ease-out forwards, floatUp 6s ease-in-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+        cursor: pointer;
+        pointer-events: auto;
+    }
+    
+    .heart-message:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 8px 25px rgba(255, 122, 183, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    @keyframes floatIn {
+        0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    @keyframes floatUp {
+        0% { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-100px) scale(0.8); }
+    }
+    
+    /* 主标题样式 */
+    .main-title {
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        width: 100%;
+        z-index: 10;
+    }
+    
+    .main-title h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: white !important;
+        margin-bottom: 15px;
+        text-shadow: 0 4px 20px rgba(255, 122, 183, 0.7);
+        animation: glow 3s ease-in-out infinite alternate;
+    }
+    
+    .main-title p {
+        font-size: 18px;
+        color: #ffd9ec !important;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+    
+    @keyframes glow {
+        0% { text-shadow: 0 4px 20px rgba(255, 122, 183, 0.7), 0 0 20px rgba(255, 122, 183, 0.4); }
+        100% { text-shadow: 0 4px 25px rgba(255, 122, 183, 0.9), 0 0 30px rgba(255, 122, 183, 0.6); }
+    }
+  </style>
+</head>
+
+<body>
+    <canvas id="canvas" ></canvas>
+    <div id="heart3D">
+        <div id="cube">
+            <!--顺序：上、下、左、右、前、后-->
+            <div><img
+                    src='./1.jpg' />
+            </div>
+            <div><img
+                    src='./1.jpg '/>
+            </div>
+            <div><img
+                    src='./1.jpg'/>
+            </div>
+            <div><img
+                    src='./1.jpg' />
+            </div>
+            <div><img
+                    src='./1.jpg' />
+            </div>
+            <div><img
+                    src='./1.jpg' />
+            </div>
+        </div>
+        <script type="text/javascript">
+            var oHeart3D = document.getElementById("heart3D");
+            for (var i = 0; i < 36; i++) {
+                var oDiv = document.createElement("div");
+                oDiv.className = "heart";
+                oDiv.style.transform = "rotateY(" + i * 10 + "deg) rotateZ(45deg) translateX(60px)";
+                //把创建出来的div添加到oHeart3D中
+                oHeart3D.appendChild(oDiv);
+            }
+        </script>
+    </div>
+    
+    <!-- 主标题区域 -->
+    <div class="main-title">
+        <h1>❤️ 你值得被温柔以待</h1>
+        <p>生命中的每一份相遇都有意义，每一次离别都是为了更好的重逢愿你能在纷扰的世界中，找到属于自己的那一片晴空</p>
+    </div>
+    
+    <audio id="bgMusic" src="./courage.mp3"
+        autoplay="autoplay" loop></audio>
+    <script>
+        var html = document.getElementsByTagName('html')[0]
+        var bgMusic = document.getElementById('bgMusic')
+        html.addEventListener('touchstart', function () {
+            bgMusic.play()
+        })
+        function toggleSound() {
+            if (bgMusic.paused) {
+                //判读是否播放
+                bgMusic.paused = false
+                bgMusic.play() //没有就播放
+            }
+        }
+        setInterval('toggleSound()', 1)
+
+    </script>
+    <script type="text/javascript">
+		var Canvas = {}
+		Canvas.anim = {
+			init: function () {
+				var canvas = document.getElementById('canvas')
+				canvas.width = window.innerWidth
+				canvas.height = window.innerHeight
+				//设置画布
+				this.ctx = canvas.getContext('2d')
+				this.letters = '*******************'
+				this.cw = canvas.width //获取画布宽
+				this.ch = canvas.height //获取画布高
+				this.particles = []
+			},
+			//执行动画
+			render: function () {
+				this.ctx.clearRect(0, 0, this.cw, this.ch)
+				//字母的属性
+				//设置x轴中心点
+				var particle = {
+					x: this.cw / 2,
+					y: this.ch,
+					xSpeed: Math.random() * 20 - 10,
+					ySpeed: Math.random() * 20 - 10,
+					size: 10,
+					character: this.letters[
+						Math.floor(Math.random() * this.letters.length)
+					],
+					/*color:[155, 100, 50, .7]*/
+					color: function getRandomColor() {
+						return (
+							'#' +
+							(function (color) {
+								return (color += '0123456789abcdef'[
+									Math.floor(Math.random() * 16)
+								]) && color.length == 6
+									? color
+									: arguments.callee(color)
+							})('')
+						)
+					},
+				}
+				this.particles.push(particle)
+				this.drawParticle()
+			},
+			//绘制字母
+			drawParticle: function () {
+				var c = this.ctx
+				var particleCount = this.particles.length
+				for (var i = 0; i < particleCount; i++) {
+					var particle = this.particles[i]
+					//设置颜色hsla值
+					var h = particle.color[0],
+						s = particle.color[1] + '%',
+						l = particle.color[2] + '%',
+						a = particle.color[3]
+					var hsla = 'hsla(' + h + ',' + s + ',' + l + ',' + a + ')'
+					//设置颜色文字
+					c.font = '12px sans-serif'
+					c.fillStyle = particle.color()
+					c.fillText(particle.character, particle.x, particle.y)
+					//设置运动轨迹
+					particle.x += particle.xSpeed
+					particle.y += particle.ySpeed
+					particle.y *= 0.98
+					//document.body.style.backgroundColor = particle.color();
+				}
+				this.fadeParticle()
+			},
+			//背景透明
+			fadeParticle: function () {
+				this.ctx.fillStyle = particle.color()
+				this.ctx.fillRect(0, 0, this.cw, this.ch)
+			},
+		}
+		Canvas.anim.init()
+		setInterval(function () {
+			Canvas.anim.render()
+		}, 20)
+	</script>
+  
+  <!-- 嵌入式粉色心形气泡特效 -->
+  <div id="girly-embed" style="width:100%; max-width:720px; height:420px; margin:20px auto; border-radius:16px; overflow:hidden; position:relative; background: radial-gradient(circle at 20% -10%, rgba(255, 122, 183, .5), transparent 40%), radial-gradient(circle at 80% 0, rgba(255, 180, 210, .25), transparent 40%), linear-gradient(135deg, #2b0a1e 0%, #0b0b14 60%, #0b0b14 100%);">
+    <div id="girly-heart-zone" style="position:absolute; left:0; right:0; top:40px; bottom:0;">
+        <!-- 浮动感动人文字容器 -->
+        <div class="heart-messages-container" id="messages-container"></div>
+    </div>
+  </div>
+  
+  <style>
+  @keyframes embedFloatHeart { 0% { transform: translateY(0) translateX(0) scale(0.9); opacity:0; } 15% { opacity:1; } 100% { transform: translateY(-520px) translateX(var(--dx)); opacity:0; } }
+  </style>
+  
+  <script>
+  // 感动人心的文字列表
+  const comfortingMessages = [
+    "❤️ 你并不孤单，这世界总有爱你的人",
+    "✨ 每一个明天都有新的希望，新的开始",
+    "🌻 你比自己想象的更坚强，更勇敢",
+    "🌸 伤口总会愈合，时间是最好的良药",
+    "💫 你的存在本身，就是一份珍贵的礼物",
+    "🕊️ 放过自己，你已经足够努力了",
+    "🌙 黑夜再长，黎明终会到来",
+    "🌟 不必完美，真实的你最有魅力",
+    "🌊 让过去的就过去，未来可期",
+    "🌹 你值得所有的美好与温柔",
+    "☀️ 今天会是美好的一天，我为你加油",
+    "🌿 慢慢来，一切都会好起来的",
+    "💕 爱你的人，希望你快乐",
+    "🌼 做你自己，就是最美的风景",
+    "🌌 星星为你闪烁，月亮为你温柔",
+    "🦋 蜕变需要时间，你已经走在路上",
+    "🌈 风雨过后，必有彩虹",
+    "🌺 你的微笑，是世界上最美的风景",
+    "🌲 扎根需要时间，成长需要耐心",
+    "🌅 今天的太阳，为全新的你升起"
+  ];
+  
+  // 生成浮动文字
+  function createHeartMessage() {
+    const container = document.getElementById('messages-container');
+    if (!container) return;
+    
+    const message = document.createElement('div');
+    message.className = 'heart-message';
+    
+    // 随机选择一条信息
+    const text = comfortingMessages[Math.floor(Math.random() * comfortingMessages.length)];
+    message.textContent = text;
+    
+    // 随机位置
+    const zoneRect = document.getElementById('girly-heart-zone').getBoundingClientRect();
+    const x = Math.random() * (zoneRect.width - 250) + 20;
+    const y = zoneRect.height;
+    
+    message.style.left = `${x}px`;
+    message.style.top = '50%';
+    
+    // 随机颜色渐变
+    const gradients = [
+        'linear-gradient(135deg, rgba(255, 122, 183, 0.3), rgba(255, 180, 210, 0.2))',
+        'linear-gradient(135deg, rgba(255, 180, 210, 0.3), rgba(255, 122, 183, 0.2))',
+        'linear-gradient(135deg, rgba(255, 107, 179, 0.3), rgba(255, 142, 200, 0.2))',
+        'linear-gradient(135deg, rgba(255, 77, 136, 0.3), rgba(255, 153, 204, 0.2))'
+    ];
+    message.style.background = gradients[Math.floor(Math.random() * gradients.length)];
+    
+    // 点击时放大
+    message.addEventListener('click', function() {
+        this.style.transform = 'scale(1.2)';
+        this.style.opacity = '1';
+        setTimeout(() => {
+            this.remove();
+        }, 500);
+    });
+    
+    container.appendChild(message);
+    
+    // 动画结束后移除
+    setTimeout(() => {
+        message.remove();
+    }, 6000);
+  }
+  
+  // 心形漂浮特效
+  (function(){
+    var zone = document.getElementById('girly-heart-zone');
+    if(!zone) return;
+    
+    function spawnHeart(){
+      var w = zone.clientWidth;
+      var left = Math.max(8, Math.min(w - 28, Math.random()*(w - 28)));
+      var dx = (Math.random()*360) - 180;
+      var duration = 3500 + Math.random()*6000;
+      var svgNS = "http://www.w3.org/2000/svg";
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox','0 0 24 24');
+      svg.setAttribute('width','28');
+      svg.setAttribute('height','28');
+      svg.style.position = 'absolute';
+      svg.style.left = left+'px';
+      svg.style.bottom = '-40px';
+      var defs = document.createElementNS(svgNS, 'defs');
+      var grad = document.createElementNS(svgNS, 'linearGradient');
+      var gradId = 'grad_embed_'+Date.now();
+      grad.setAttribute('id', gradId);
+      var s1 = document.createElementNS(svgNS, 'stop');
+      s1.setAttribute('offset','0%');
+      s1.setAttribute('stop-color','#ff7ab7');
+      var s2 = document.createElementNS(svgNS, 'stop');
+      s2.setAttribute('offset','100%');
+      s2.setAttribute('stop-color','#ffd1e8');
+      grad.appendChild(s1); grad.appendChild(s2);
+      defs.appendChild(grad);
+      svg.appendChild(defs);
+      var path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d','M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.99 4.5 2.09C12.99 4.99 14.66 4 16.5 4 19 4 21 6 21 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+      path.setAttribute('fill','url(#'+gradId+')');
+      svg.appendChild(path);
+      zone.appendChild(svg);
+      svg.style.setProperty('--dx', dx+'px');
+      svg.style.animation = 'embedFloatHeart '+ duration +'ms linear forwards';
+      setTimeout(function(){ svg.remove(); }, duration+100);
+    }
+    
+    // 点击嵌入区触发心形漂浮和文字
+    document.getElementById('girly-embed').addEventListener('click', function() {
+        spawnHeart();
+        if (Math.random() > 0.7) { // 30%几率同时生成文字
+            createHeartMessage();
+        }
+    });
+    
+    setInterval(spawnHeart, 500);
+    setInterval(createHeartMessage, 3000); // 每3秒生成一条感动文字
+  })();
+  </script>
+
+</html>
