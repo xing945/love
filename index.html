@@ -63,6 +63,27 @@
             height: 100px;
             border: 1px solid #ccc;
             position: absolute;
+            /* 添加这些防闪烁属性 */
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            transform-origin: center;
+        }
+
+        #cube div img {
+            /* 图片硬件加速 */
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+            -moz-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            -o-transform: translateZ(0);
+            transform: translateZ(0);
         }
 
         #cube div:nth-child(1) {
