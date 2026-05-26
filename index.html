@@ -208,7 +208,7 @@
 			transform: translateX(-50%);
 			z-index: 10;
 			background: rgba(26, 26, 46, 0.95);
-			padding: 20px 40px;
+			padding: 15px 25px;
 			border-radius: 20px;
 			border: 1px solid rgba(255, 107, 107, 0.3);
 			backdrop-filter: blur(20px);
@@ -218,8 +218,10 @@
 				inset 0 0 20px rgba(255, 107, 107, 0.05);
 			display: flex;
 			align-items: center;
-			gap: 20px;
-			min-width: 450px;
+			gap: 15px;
+			width: calc(100% - 40px);
+			max-width: 600px;
+			min-width: 280px;
 		}
 
 		.audio-player::before {
@@ -373,11 +375,11 @@
 		}
 
 		.audio-visualizer.active {
-			opacity: 1;
+			opacity: .8;
 		}
 
 		.visualizer-bar {
-			width: 6px;
+			width: 10px;
             margin:0 2px;
 			border-radius: 3px;
 			transition: height 0.05s ease;
@@ -447,6 +449,108 @@
 			0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
 			50% { transform: translateY(-30px) translateX(15px); opacity: 0.8; }
 		}
+
+		@keyframes pulse {
+			0%, 100% { filter: brightness(1); }
+			50% { filter: brightness(1.3); }
+		}
+
+		@keyframes glow {
+			0%, 100% { box-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+			50% { box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+		}
+
+		@media screen and (max-width: 768px) {
+			.audio-visualizer {
+				bottom: 100px;
+				height: 60px;
+				gap: 2px;
+				width: 100%;
+				max-width: 320px;
+			}
+
+			.visualizer-bar {
+				width: 10px;
+				margin: 0 1px;
+				border-radius: 2px;
+			}
+
+			.lyrics-container {
+				top: 70%;
+				width: 100%;
+				max-width: 300px;
+			}
+
+			.lyrics-line {
+				font-size: 14px;
+				padding: 8px 12px;
+			}
+
+			.lyrics-line.active {
+				font-size: 18px;
+				padding: 10px 16px;
+			}
+
+			.audio-player {
+				bottom: 20px;
+				height: 70px;
+				padding: 10px 15px;
+				gap: 10px;
+			}
+
+			.play-btn {
+				width: 40px;
+				height: 40px;
+			}
+
+			.song-title {
+				font-size: 12px;
+			}
+
+			.progress-container {
+				height: 3px;
+			}
+
+			.time {
+				font-size: 10px;
+			}
+
+			.volume-control {
+				width: 50px;
+			}
+		}
+
+		@media screen and (max-width: 480px) {
+			.audio-visualizer {
+				height: 50px;
+				bottom: 90px;
+			}
+
+			.visualizer-bar {
+				width: 10px;
+			}
+
+			.lyrics-container {
+				top: 70%;
+			}
+
+			.lyrics-line {
+				font-size: 12px;
+			}
+
+			.lyrics-line.active {
+				font-size: 16px;
+			}
+
+			.audio-player {
+				height: 50px;
+			}
+
+			.play-btn {
+				width: 35px;
+				height: 35px;
+			}
+		}
 	</style>
 </head>
 
@@ -501,15 +605,6 @@
 				<span id="currentTime">0:00</span>
 				<span id="duration">0:00</span>
 			</div>
-		</div>
-
-		<div class="volume-control">
-			<button class="volume-btn" onclick="toggleMute()">
-				<svg viewBox="0 0 24 24" id="volumeIcon">
-					<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-				</svg>
-			</button>
-			<div class="volume-slider" id="volumeSlider" onclick="setVolume(event)"></div>
 		</div>
 
 		<audio id="audio" src="./courage.mp3" crossorigin="anonymous"></audio>
@@ -578,14 +673,22 @@
 		let animationId = null
 
 		const colors = [
-			'linear-gradient(to top, #ff6b6b, #ff8e8e)',
-			'linear-gradient(to top, #c0392b, #e74c3c)',
-			'linear-gradient(to top, #ff6b6b, #ffd93d)',
-			'linear-gradient(to top, #c0392b, #ff6b6b)',
-			'linear-gradient(to top, #ff8e8e, #ffb6c1)',
-			'linear-gradient(to top, #ffd93d, #ff6b6b)',
-			'linear-gradient(to top, #ff6b6b, #ff4757)',
-			'linear-gradient(to top, #e74c3c, #ff6b6b)'
+			'linear-gradient(to top, #ff006e, #ff8e8e)',
+			'linear-gradient(to top, #8338ec, #c084fc)',
+			'linear-gradient(to top, #06d6a0, #96e6a1)',
+			'linear-gradient(to top, #ffd166, #ffe59d)',
+			'linear-gradient(to top, #ef476f, #ff758f)',
+			'linear-gradient(to top, #118ab2, #06d6a0)',
+			'linear-gradient(to top, #7b2cbf, #9d4edd)',
+			'linear-gradient(to top, #ff9f1c, #ffbf69)',
+			'linear-gradient(to top, #ff006e, #f72585)',
+			'linear-gradient(to top, #3a0ca3, #4361ee)',
+			'linear-gradient(to top, #00f5d4, #90e0ef)',
+			'linear-gradient(to top, #fb5607, #ffbe0b)',
+			'linear-gradient(to top, #ff006e, #ffbe0b)',
+			'linear-gradient(to top, #8338ec, #06d6a0)',
+			'linear-gradient(to top, #ef476f, #7b2cbf)',
+			'linear-gradient(to top, #118ab2, #ffd166)'
 		]
 
 		const lyrics = [
@@ -629,6 +732,7 @@
 			if (!isPlaying) return
 			
 			const bars = visualizer.children
+			const time = Date.now()
 			
 			if (analyser && !isUsingSimulator) {
 				try {
@@ -638,9 +742,23 @@
 						const freqIndex = Math.floor(i * analyser.frequencyBinCount / bars.length)
 						const value = dataArray[freqIndex] || dataArray[i] || 0
 						const height = Math.max(8, (value / 255) * 100)
+						const colorIndex = (i + Math.floor(time / 500)) % colors.length
+						const color = colors[colorIndex]
+						
 						bars[i].style.height = height + 'px'
-						bars[i].style.background = colors[i % colors.length]
-						bars[i].style.boxShadow = `0 0 ${height/3}px ${colors[i % colors.length]}`
+						bars[i].style.background = color
+						bars[i].style.borderRadius = height > 50 ? '6px 6px 3px 3px' : '3px'
+						
+						if (height > 60) {
+							bars[i].style.boxShadow = `0 0 ${height/2}px ${color}, 0 0 ${height}px ${color}, inset 0 -2px 4px rgba(0,0,0,0.2)`
+							bars[i].style.filter = 'brightness(1.2)'
+						} else if (height > 30) {
+							bars[i].style.boxShadow = `0 0 ${height/3}px ${color}, 0 0 ${height/2}px ${color}`
+							bars[i].style.filter = 'brightness(1.1)'
+						} else {
+							bars[i].style.boxShadow = `0 0 ${height/4}px ${color}`
+							bars[i].style.filter = 'brightness(1)'
+						}
 					}
 				} catch (e) {
 					console.log('音频分析失败:', e)
@@ -648,12 +766,21 @@
 				}
 			} else {
 				for (let i = 0; i < bars.length; i++) {
-					const baseHeight = 30 + Math.sin(Date.now() / 200 + i * 0.5) * 20
+					const baseHeight = 30 + Math.sin(time / 200 + i * 0.5) * 20
 					const randomHeight = Math.random() * 50
 					const height = Math.max(8, baseHeight + randomHeight)
+					const colorIndex = (i + Math.floor(time / 500)) % colors.length
+					const color = colors[colorIndex]
+					
 					bars[i].style.height = height + 'px'
-					bars[i].style.background = colors[i % colors.length]
-					bars[i].style.boxShadow = `0 0 ${height/3}px rgba(255, 107, 107, 0.6)`
+					bars[i].style.background = color
+					bars[i].style.borderRadius = height > 50 ? '6px 6px 3px 3px' : '3px'
+					
+					if (height > 60) {
+						bars[i].style.boxShadow = `0 0 ${height/2}px ${color}, 0 0 ${height}px ${color}, inset 0 -2px 4px rgba(0,0,0,0.2)`
+					} else {
+						bars[i].style.boxShadow = `0 0 ${height/3}px ${color}`
+					}
 				}
 			}
 			
