@@ -182,7 +182,7 @@
 		}
 
 		.title h1 {
-			font-size: 2.5rem;
+			font-size: 2rem;
 			color: #ff6b6b;
 			text-shadow: 
 				0 0 10px #ff6b6b,
@@ -246,8 +246,8 @@
 		}
 
 		.play-btn {
-			width: 50px;
-			height: 50px;
+			width: 70px;
+			height: 70px;
 			border-radius: 50%;
 			background: linear-gradient(135deg, #ff6b6b, #c0392b);
 			border: none;
@@ -265,10 +265,10 @@
 		}
 
 		.play-btn svg {
-			width: 20px;
-			height: 20px;
+			width: 28px;
+			height: 28px;
 			fill: #fff;
-			margin-left: 3px;
+			margin-left: 4px;
 		}
 
 		.play-btn.playing svg {
@@ -368,9 +368,9 @@
 			left: 50%;
 			transform: translateX(-50%);
 			display: flex;
-			gap: 12px;
+			gap: 18px;
 			align-items: flex-end;
-			height: 120px;
+			height: 160px;
 			z-index: 9;
 			opacity: 0.3;
 			transition: opacity 0.3s ease;
@@ -381,9 +381,9 @@
 		}
 
 		.visualizer-bar {
-			width: 24px;
-			margin: 0 4px;
-			border-radius: 12px;
+			width: 70px;
+			margin: 0 8px;
+			border-radius: 35px;
 			transition: height 0.05s ease;
 		}
 
@@ -465,16 +465,16 @@
 		@media screen and (max-width: 768px) {
 			.audio-visualizer {
 				bottom: 100px;
-				height: 80px;
-				gap: 6px;
+				height: 120px;
+				gap: 12px;
 				width: 100%;
-				max-width: 300px;
+				max-width: 360px;
 			}
 
 			.visualizer-bar {
-				width: 12px;
-				margin: 0 2px;
-				border-radius: 6px;
+				width: 35px;
+				margin: 0 4px;
+				border-radius: 17px;
 			}
 
 			.lyrics-container {
@@ -501,8 +501,8 @@
 			}
 
 			.play-btn {
-				width: 40px;
-				height: 40px;
+				width: 55px;
+				height: 55px;
 			}
 
 			.song-title {
@@ -531,7 +531,7 @@
 			}
 
 			.visualizer-bar {
-				width: 10px;
+				width: 20px;
 				margin: 0 2px;
 			}
 
@@ -552,8 +552,9 @@
 			}
 
 			.play-btn {
-				width: 35px;
-				height: 35px;
+				width: 50px;
+				height: 50px;
+                font-size: 2em;
 			}
 		}
 	</style>
@@ -644,11 +645,11 @@
 
 		function createVisualizer() {
 			const visualizer = document.getElementById('visualizer')
-			const barCount = window.innerWidth < 768 ? 18 : 32
+			const barCount = window.innerWidth < 768 ? 10 : 14
 			for (let i = 0; i < barCount; i++) {
 				const bar = document.createElement('div')
 				bar.className = 'visualizer-bar'
-				bar.style.height = '10px'
+				bar.style.height = '20px'
 				visualizer.appendChild(bar)
 			}
 		}
