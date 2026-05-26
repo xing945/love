@@ -219,7 +219,7 @@
 			display: flex;
 			align-items: center;
 			gap: 20px;
-			min-width: 350px;
+			min-width: 450px;
 		}
 
 		.audio-player::before {
@@ -378,13 +378,14 @@
 
 		.visualizer-bar {
 			width: 6px;
+            margin:0 2px;
 			border-radius: 3px;
 			transition: height 0.05s ease;
 		}
 
 		.lyrics-container {
 			position: absolute;
-			top: 50%;
+			top: 70%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			text-align: center;
@@ -694,7 +695,9 @@
 				if (animationId) {
 					cancelAnimationFrame(animationId)
 				}
+				isPlaying = false
 			} else {
+				isPlaying = true
 				initAudioContext()
 				audio.play()
 				playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
@@ -703,7 +706,6 @@
 				lyricsContainer.classList.add('active')
 				updateVisualizer()
 			}
-			isPlaying = !isPlaying
 		}
 
 		function toggleMute() {
