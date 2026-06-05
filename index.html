@@ -1,1108 +1,588 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
+
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>破碎记忆</title>
-	<script src="./jquery.js"></script>
-	<style>
-		html,
-		body {
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
-			position: absolute;
-			overflow: hidden;
-			margin: 0;
-		}
-
-		#myCan {
-			width: 100%;
-			height: 100%;
-		}
-
-		li {
-			list-style: none;
-		}
-
-		.box {
-			width: 200px;
-			height: 200px;
-			position: absolute;
-			top: 30%;
-			left: 50%;
-			transform: translateX(-50%);
-			-webkit-transform-style: preserve-3d;
-			-webkit-transform: translateX(-50%) rotateX(13deg);
-			-webkit-animation: rotate3d 15s linear infinite;
-		}
-
-		.minbox {
-			width: 100px;
-			height: 100px;
-			position: absolute;
-			left: 50px;
-			top: 30px;
-			-webkit-transform-style: preserve-3d;
-		}
-
-		.minbox li {
-			width: 100px;
-			height: 100px;
-			position: absolute;
-			left: 0;
-			top: 0;
-			background-size: 100% 100% !important;
-			border-radius: 8px;
-			filter: grayscale(70%) contrast(1.2) brightness(0.8);
-			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-		}
-
-		.minbox li:nth-child(1) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: translateZ(50px);
-		}
-
-		.minbox li:nth-child(2) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateX(180deg) translateZ(50px);
-		}
-
-		.minbox li:nth-child(3) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateX(-90deg) translateZ(50px);
-		}
-
-		.minbox li:nth-child(4) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateX(90deg) translateZ(50px);
-		}
-
-		.minbox li:nth-child(5) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateY(-90deg) translateZ(50px);
-		}
-
-		.minbox li:nth-child(6) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateY(90deg) translateZ(50px);
-		}
-
-		.maxbox {
-			width: 200px;
-			height: 200px;
-			position: absolute;
-			left: 0;
-			top: -20px;
-			-webkit-transform-style: preserve-3d;
-		}
-
-		.maxbox li {
-			width: 200px;
-			height: 200px;
-			background-size: 100% 100% !important;
-			border: 1px solid rgba(255, 107, 107, 0.3);
-			position: absolute;
-			left: 0;
-			top: 0;
-			opacity: 0.4;
-			-webkit-transition: all 0.8s ease;
-			border-radius: 10px;
-			filter: grayscale(50%) contrast(1.1);
-			box-shadow: 0 0 30px rgba(255, 107, 107, 0.1);
-		}
-
-		.maxbox li:nth-child(1) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: translateZ(100px);
-		}
-
-		.maxbox li:nth-child(2) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateX(180deg) translateZ(100px);
-		}
-
-		.maxbox li:nth-child(3) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateX(-90deg) translateZ(100px);
-		}
-
-		.maxbox li:nth-child(4) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateX(90deg) translateZ(100px);
-		}
-
-		.maxbox li:nth-child(5) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateY(-90deg) translateZ(100px);
-		}
-
-		.maxbox li:nth-child(6) {
-            background: url('./1.jpeg') no-repeat;
-			-webkit-transform: rotateY(90deg) translateZ(100px);
-		}
-
-		.box:hover ol li {
-			opacity: 0.7;
-			filter: grayscale(20%) contrast(1.2);
-			box-shadow: 0 0 40px rgba(255, 107, 107, 0.3);
-		}
-
-		.box:hover ol li:nth-child(1) { -webkit-transform: translateZ(200px); }
-		.box:hover ol li:nth-child(2) { -webkit-transform: rotateX(180deg) translateZ(200px); }
-		.box:hover ol li:nth-child(3) { -webkit-transform: rotateX(-90deg) translateZ(200px); }
-		.box:hover ol li:nth-child(4) { -webkit-transform: rotateX(90deg) translateZ(200px); }
-		.box:hover ol li:nth-child(5) { -webkit-transform: rotateY(-90deg) translateZ(200px); }
-		.box:hover ol li:nth-child(6) { -webkit-transform: rotateY(90deg) translateZ(200px); }
-
-		.box.active ol li {
-			opacity: 0.7;
-			filter: grayscale(20%) contrast(1.2);
-		}
-
-		.box.active ol li:nth-child(1) { -webkit-transform: translateZ(200px); }
-		.box.active ol li:nth-child(2) { -webkit-transform: rotateX(180deg) translateZ(200px); }
-		.box.active ol li:nth-child(3) { -webkit-transform: rotateX(-90deg) translateZ(200px); }
-		.box.active ol li:nth-child(4) { -webkit-transform: rotateX(90deg) translateZ(200px); }
-		.box.active ol li:nth-child(5) { -webkit-transform: rotateY(-90deg) translateZ(200px); }
-		.box.active ol li:nth-child(6) { -webkit-transform: rotateY(90deg) translateZ(200px); }
-
-		@keyframes rotate3d {
-			0% { transform: translateX(-50%) rotateX(13deg) rotateY(0deg) rotateZ(0deg); }
-			100% { transform: translateX(-50%) rotateX(13deg) rotateY(360deg) rotateZ(360deg); }
-		}
-
-		.title {
-			position: absolute;
-			top: 50px;
-			left: 50%;
-			transform: translateX(-50%);
-			text-align: center;
-			z-index: 10;
-		}
-
-		.title h1 {
-			font-size: 2rem;
-			color: #ff6b6b;
-			text-shadow: 
-				0 0 10px #ff6b6b,
-				0 0 20px #ff6b6b,
-				0 0 40px #c0392b;
-			letter-spacing: 8px;
-			font-weight: 300;
-            white-space: nowrap;
-			margin: 0;
-		}
-
-		.title p {
-			color: #a08a8a;
-			font-size: 0.9rem;
-			letter-spacing: 4px;
-			margin-top: 10px;
-            white-space: nowrap;
-			font-style: italic;
-		}
-
-		.audio-player {
-			position: absolute;
-			bottom: 30px;
-			left: 50%;
-			transform: translateX(-50%);
-			z-index: 10;
-			background: rgba(26, 26, 46, 0.95);
-			padding: 15px 25px;
-			border-radius: 20px;
-			border: 1px solid rgba(255, 107, 107, 0.3);
-			backdrop-filter: blur(20px);
-			box-shadow: 
-				0 10px 40px rgba(0, 0, 0, 0.5),
-				0 0 30px rgba(255, 107, 107, 0.1),
-				inset 0 0 20px rgba(255, 107, 107, 0.05);
-			display: flex;
-			align-items: center;
-			gap: 15px;
-			width: calc(100% - 40px);
-			max-width: 600px;
-			min-width: 280px;
-		}
-
-		.audio-player::before {
-			content: '';
-			position: absolute;
-			top: -2px;
-			left: -2px;
-			right: -2px;
-			bottom: -2px;
-			background: linear-gradient(45deg, #ff6b6b, #c0392b, #ff6b6b, #c0392b);
-			border-radius: 22px;
-			z-index: -1;
-			opacity: 0.3;
-			animation: borderGlow 3s ease-in-out infinite;
-		}
-
-		@keyframes borderGlow {
-			0%, 100% { opacity: 0.3; }
-			50% { opacity: 0.6; }
-		}
-
-		.play-btn {
-			width: 70px;
-			height: 70px;
-			border-radius: 50%;
-			background: linear-gradient(135deg, #ff6b6b, #c0392b);
-			border: none;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			transition: all 0.3s ease;
-			box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
-		}
-
-		.play-btn:hover {
-			transform: scale(1.1);
-			box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6);
-		}
-
-		.play-btn svg {
-			width: 28px;
-			height: 28px;
-			fill: #fff;
-			margin-left: 4px;
-		}
-
-		.play-btn.playing svg {
-			margin-left: 0;
-		}
-
-		.audio-info {
-			flex: 1;
-			color: #e8d5d5;
-		}
-
-		.audio-info .song-title {
-			font-size: 0.9rem;
-			margin-bottom: 5px;
-			letter-spacing: 1px;
-		}
-
-		.audio-info .progress-container {
-			width: 100%;
-			height: 4px;
-			background: rgba(255, 107, 107, 0.2);
-			border-radius: 2px;
-			overflow: hidden;
-			cursor: pointer;
-		}
-
-		.audio-info .progress-bar {
-			height: 100%;
-			background: linear-gradient(90deg, #ff6b6b, #c0392b);
-			width: 0%;
-			transition: width 0.1s ease;
-			box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
-		}
-
-		.audio-info .time {
-			font-size: 0.7rem;
-			color: #a08a8a;
-			margin-top: 5px;
-			display: flex;
-			justify-content: space-between;
-		}
-
-		.volume-control {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
-
-		.volume-btn {
-			width: 35px;
-			height: 35px;
-			border-radius: 50%;
-			background: rgba(255, 107, 107, 0.2);
-			border: 1px solid rgba(255, 107, 107, 0.3);
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			transition: all 0.3s ease;
-		}
-
-		.volume-btn:hover {
-			background: rgba(255, 107, 107, 0.4);
-			transform: scale(1.1);
-		}
-
-		.volume-btn svg {
-			width: 16px;
-			height: 16px;
-			fill: #ff6b6b;
-		}
-
-		.volume-slider {
-			width: 80px;
-			height: 4px;
-			background: rgba(255, 107, 107, 0.2);
-			border-radius: 2px;
-			cursor: pointer;
-			position: relative;
-		}
-
-		.volume-slider::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			height: 100%;
-			background: linear-gradient(90deg, #ff6b6b, #c0392b);
-			width: var(--volume, 70%);
-			border-radius: 2px;
-			transition: width 0.1s ease;
-		}
-
-		.audio-visualizer {
-			position: absolute;
-			bottom: 130px;
-			left: 50%;
-			transform: translateX(-50%);
-			display: flex;
-			gap: 18px;
-			align-items: flex-end;
-			height: 160px;
-			z-index: 9;
-			opacity: 0.3;
-			transition: opacity 0.3s ease;
-		}
-
-		.audio-visualizer.active {
-			opacity: .8;
-		}
-
-		.visualizer-bar {
-			width: 70px;
-			margin: 0 8px;
-			border-radius: 35px;
-			transition: height 0.05s ease;
-		}
-
-		.lyrics-container {
-			position: absolute;
-			top: 70%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			text-align: center;
-			z-index: 8;
-			pointer-events: none;
-			opacity: 0;
-			transition: opacity 0.5s ease;
-		}
-
-		.lyrics-container.active {
-			opacity: 1;
-		}
-
-		.lyrics-line {
-			font-size: 1.2rem;
-			color: #ff6b6b;
-			text-shadow: 
-				0 0 10px #ff6b6b,
-				0 0 20px #c0392b,
-				0 0 30px rgba(192, 57, 43, 0.5);
-			letter-spacing: 3px;
-			margin: 10px 0;
-			transition: all 0.3s ease;
-			opacity: 0.4;
-			transform: scale(0.9);
-		}
-
-		.lyrics-line.active {
-			opacity: 1;
-			transform: scale(1);
-			font-size: 1.5rem;
-			text-shadow: 
-				0 0 15px #ff6b6b,
-				0 0 30px #c0392b,
-				0 0 45px rgba(192, 57, 43, 0.7);
-		}
-
-		.particles {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			pointer-events: none;
-			z-index: 5;
-		}
-
-		.particle {
-			position: absolute;
-			width: 4px;
-			height: 4px;
-			background: #ff6b6b;
-			border-radius: 50%;
-			opacity: 0.6;
-			animation: float 4s ease-in-out infinite;
-		}
-
-		@keyframes float {
-			0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
-			50% { transform: translateY(-30px) translateX(15px); opacity: 0.8; }
-		}
-
-		@keyframes pulse {
-			0%, 100% { filter: brightness(1); }
-			50% { filter: brightness(1.3); }
-		}
-
-		@keyframes glow {
-			0%, 100% { box-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
-			50% { box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
-		}
-
-		@media screen and (max-width: 768px) {
-			.audio-visualizer {
-				bottom: 100px;
-				height: 120px;
-				gap: 12px;
-				width: 100%;
-				max-width: 360px;
-			}
-
-			.visualizer-bar {
-				width: 35px;
-				margin: 0 4px;
-				border-radius: 17px;
-			}
-
-			.lyrics-container {
-				top: 70%;
-				width: 100%;
-				max-width: 300px;
-			}
-
-			.lyrics-line {
-				font-size: 14px;
-				padding: 8px 12px;
-			}
-
-			.lyrics-line.active {
-				font-size: 18px;
-				padding: 10px 16px;
-			}
-
-			.audio-player {
-				bottom: 20px;
-				height: 70px;
-				padding: 10px 15px;
-				gap: 10px;
-			}
-
-			.play-btn {
-				width: 55px;
-				height: 55px;
-			}
-
-			.song-title {
-				font-size: 12px;
-			}
-
-			.progress-container {
-				height: 3px;
-			}
-
-			.time {
-				font-size: 10px;
-			}
-
-			.volume-control {
-				width: 50px;
-			}
-		}
-
-		@media screen and (max-width: 480px) {
-			.audio-visualizer {
-				height: 70px;
-				bottom: 90px;
-				gap: 5px;
-				max-width: 260px;
-			}
-
-			.visualizer-bar {
-				width: 20px;
-				margin: 0 2px;
-			}
-
-			.lyrics-container {
-				top: 70%;
-			}
-
-			.lyrics-line {
-				font-size: 12px;
-			}
-
-			.lyrics-line.active {
-				font-size: 16px;
-			}
-
-			.audio-player {
-				height: 50px;
-			}
-
-			.play-btn {
-				width: 50px;
-				height: 50px;
-                font-size: 2em;
-			}
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="author" content="m.dongpi.com">
+    <!--描述-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!--缩屏-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>title</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: black;
+            background-color: #000;
+            overflow: hidden;
+            perspective: 1000px;
+            /*景深：视角*/
+        }
+
+        canvas{
+            position: absolute;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+        }
+
+        .ds-no {
+            display: none;
+        }
+
+        .ds-black {
+            display: block;
+        }
+
+        #cube {
+            width: 300px;
+            height: 300px;
+            margin: 150px auto;
+            /*border:1px solid blue;*/
+            position: relative;
+            transform-style: preserve-3d;
+            /*3D的环境*/
+            /*transition:2s;动画过渡*/
+            /*transform-origin:50% 50% -25px;旋转中心*/
+            -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            
+            /* 添加抗锯齿和渲染优化 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            
+            /* 强制GPU加速 */
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            
+            /* 修复z-index问题 */
+            transform: translateX(50px) translateY(108px) translateZ(50px) rotateX(0.01deg) rotateY(0.01deg);
+        }
+
+        #cube div {
+            /*混合选择器*/
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ccc;
+            position: absolute;
+            /* 添加这些防闪烁属性 */
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            transform-origin: center;
+        }
+
+        #cube div img {
+            /* 图片硬件加速 */
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+            -moz-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            -o-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        #cube div:nth-child(1) {
+            top: 100px;
+            /*旋转中心：x方向 y方向 z方向*/
+            /*transform-origin:50% 50% 0;*/
+            transform-origin: top;
+            /*css3属性：围绕X轴顺时针旋转90度*/
+            transform: rotateX(-90deg)
+        }
+
+        #cube div:nth-child(2) {
+            top: 0px;
+            transform-origin: top;
+            transform: rotateX(-90deg)
+        }
+
+        #cube div:nth-child(3) {
+            left: -100px;
+            transform-origin: right;
+            transform: rotateY(-90deg)
+        }
+
+        #cube div:nth-child(4) {
+            right: 100px;
+            transform-origin: left;
+            transform: rotateY(90deg)
+        }
+
+        #cube div:nth-child(5) {}
+
+        #cube div:nth-child(6) {
+            /*css3变换：沿着z轴做移动*/
+            transform: translateZ(-100px);
+        }
+
+        /*#cube:hover{css动态伪类
+         transform:rotateY(360deg);
+    }*/
+
+
+        #heart3D {
+            width: 200px;
+            height: 320px;
+            margin: auto;
+            transform-style: preserve-3d;
+            /*设置为3D环境*/
+            /*css3自定义动画：动画的名称 时间 匀速运动  无限重复*/
+            animation: rot 10s linear infinite;
+            position: relative;
+        }
+
+        /*css3动画关键帧*/
+        @keyframes rot {
+            from {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+
+            to {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        #heart3D div.heart {
+            width: 200px;
+            height: 320px;
+            border: 1px solid red;
+            border-left: 0;
+            /*0|none 推荐用0，因为低版本的ie不兼容none*/
+            border-bottom: 0;
+            border-radius: 50% 50% 0/50% 40% 0;
+            /*圆角属性*/
+            /*transform:rotate(45deg);*/
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #cube div img {
+            width: 100px;
+            height: 100px;
+        }
+    /* Embedded girly region styles */
+    #girly-embed { width: 100%; max-width: 720px; height: 420px; margin: 20px auto; border-radius: 16px; overflow: hidden; position: relative; background: radial-gradient(circle at 20% -10%, rgba(255, 122, 183, .5), transparent 40%), radial-gradient(circle at 80% 0, rgba(255, 180, 210, .25), transparent 40%), linear-gradient(135deg, #2b0a1e 0%, #0b0b14 60%, #0b0b14 100%); box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+    #girly-embed .header { text-align:center; padding:8px 12px; color:#fff; font-weight:600; }
+    #girly-heart-zone { position:absolute; left:0; right:0; top:40px; bottom:0; pointer-events:auto; }
+    .girly-message { position:absolute; left:50%; top:18%; transform:translateX(-50%); background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); color:#fff; padding:18px 22px; border-radius:12px; backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%); box-shadow: 0 6px 24px rgba(0,0,0,.5); max-width:86%; text-align:center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    .girly-message .main { font-size:18px; line-height:1.4; margin-bottom:8px; font-weight:600; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+    .girly-message .sub { font-size:13px; opacity:.9; color: #ffd9ec; }
+    .girly-message .hint { margin-top:10px; font-size:12px; color:#ffd1e8; opacity:.85 }
+    .girly-message .next-btn { display:inline-block; margin-top:10px; background:linear-gradient(90deg,#ff7ab7,#ffd1e8); color:#60102b; border-radius:999px; padding:6px 10px; font-weight:700; cursor:pointer; box-shadow: 0 4px 12px rgba(255,122,183,.12); }
+    @keyframes embedFloatHeart { 0% { transform: translateY(0) translateX(0) scale(0.9); opacity:0; } 15% { opacity:1; } 100% { transform: translateY(-520px) translateX(var(--dx)); opacity:0; } }
+    
+    /* 新增的感动人文字样式 */
+    .heart-messages-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+    }
+    
+    .heart-message {
+        position: absolute;
+        background: linear-gradient(135deg, rgba(255, 122, 183, 0.3), rgba(255, 180, 210, 0.2));
+        color: white;
+        padding: 12px 18px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        max-width: 280px;
+        line-height: 1.5;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 6px 20px rgba(255, 122, 183, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: floatIn 0.8s ease-out forwards, floatUp 6s ease-in-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+        cursor: pointer;
+        pointer-events: auto;
+    }
+    
+    .heart-message:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 8px 25px rgba(255, 122, 183, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    @keyframes floatIn {
+        0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    @keyframes floatUp {
+        0% { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-100px) scale(0.8); }
+    }
+    
+    /* 主标题样式 */
+    .main-title {
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        width: 100%;
+        z-index: 10;
+    }
+    
+    .main-title h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: white !important;
+        margin-bottom: 15px;
+        text-shadow: 0 4px 20px rgba(255, 122, 183, 0.7);
+        animation: glow 3s ease-in-out infinite alternate;
+    }
+    
+    .main-title p {
+        font-size: 18px;
+        color: #ffd9ec !important;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    #music-toggle {
+        position: fixed;
+        right: 10px;
+        top: 20px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff7ab7, #ff99cc);
+        color: white;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(255, 122, 183, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: all 0.3s ease;
+        outline: none;
+        opacity: 0.8;
+    }
+    #music-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(255, 122, 183, 0.6);
+    }
+    /* 按下效果 */
+    #music-toggle:active {
+        transform: scale(0.95);
+    }
+    
+    @keyframes glow {
+        0% { text-shadow: 0 4px 20px rgba(255, 122, 183, 0.7), 0 0 20px rgba(255, 122, 183, 0.4); }
+        100% { text-shadow: 0 4px 25px rgba(255, 122, 183, 0.9), 0 0 30px rgba(255, 122, 183, 0.6); }
+    }
+  </style>
 </head>
 
 <body>
-	<div class="title">
-		<h1>破碎记忆</h1>
-		<p>Broken Memories</p>
-	</div>
- 
-	<div class="box">
-		<ul class="minbox">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-		<ol class="maxbox">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ol>
-	</div>
+    <canvas id="canvas" ></canvas>
+    <button id="music-toggle" onclick="toggleSound()">
+        ▶️
+    </button>
+    <div id="heart3D">
+        <div id="cube">
+            <!--顺序：上、下、左、右、前、后-->
+            <div><img
+                    src='./1.jpg' />
+            </div>
+            <div><img
+                    src='./1.jpg '/>
+            </div>
+            <div><img
+                    src='./1.jpg'/>
+            </div>
+            <div><img
+                    src='./1.jpg' />
+            </div>
+            <div><img
+                    src='./1.jpg' />
+            </div>
+            <div><img
+                    src='./1.jpg' />
+            </div>
+        </div>
+        <script type="text/javascript">
+            var oHeart3D = document.getElementById("heart3D");
+            for (var i = 0; i < 36; i++) {
+                var oDiv = document.createElement("div");
+                oDiv.className = "heart";
+                oDiv.style.transform = "rotateY(" + i * 10 + "deg) rotateZ(45deg) translateX(60px)";
+                //把创建出来的div添加到oHeart3D中
+                oHeart3D.appendChild(oDiv);
+            }
+        </script>
+    </div>
+    
+    <!-- 主标题区域 -->
+    <div class="main-title">
+        <h1>❤️ 你值得被温柔以待</h1>
+        <p>生命中的每一份相遇都有意义，每一次离别都是为了更好的重逢愿你能在纷扰的世界中，找到属于自己的那一片晴空</p>
+    </div>
+    
+    <audio id="bgMusic" src="./courage.mp3"
+        autoplay="autoplay" loop></audio>
+    <script>
+        var html = document.getElementsByTagName('html')[0]
+        var bgMusic = document.getElementById('bgMusic')
+        html.addEventListener('touchstart', function () {
+            bgMusic.play()
+        })
+        function toggleSound() {
+            if (bgMusic.paused) {
+                //判读是否播放
+                bgMusic.paused = false
+                bgMusic.play() //没有就播放
+            }
+        }
+        setInterval('toggleSound()', 1000)
 
-	<div class="particles" id="particles"></div>
-
-	<div class="audio-visualizer" id="visualizer"></div>
-
-	<div class="lyrics-container" id="lyricsContainer">
-		<div class="lyrics-line" id="lyricLine1"></div>
-		<div class="lyrics-line active" id="lyricLine2"></div>
-		<div class="lyrics-line" id="lyricLine3"></div>
-	</div>
-
-	<div class="audio-player">
-		<button class="play-btn" id="playBtn" onclick="togglePlay()">
-			<svg viewBox="0 0 24 24" id="playIcon">
-				<path d="M8 5v14l11-7z"/>
-			</svg>
-		</button>
-		
-		<div class="audio-info">
-			<div class="song-title">破碎记忆</div>
-			<div class="progress-container" id="progressContainer" onclick="seek(event)">
-				<div class="progress-bar" id="progressBar"></div>
-			</div>
-			<div class="time">
-				<span id="currentTime">0:00</span>
-				<span id="duration">0:00</span>
-			</div>
-		</div>
-
-		<audio id="audio" src="./courage.mp3" crossorigin="anonymous"></audio>
-	</div>
-
-	<canvas id="myCan" width="961" height="880"></canvas>
-
-	<script>
-		const box = document.getElementsByClassName('box')[0]
-		let index = 0
-		setInterval(() => {
-			index++
-			if (index === 2) {
-				index = 0
-			}
-			box.className = index === 0 ? 'box' : 'box active'
-		}, 5000)
-
-		function createParticles() {
-			const container = document.getElementById('particles')
-			for (let i = 0; i < 30; i++) {
-				const particle = document.createElement('div')
-				particle.className = 'particle'
-				particle.style.left = Math.random() * 100 + '%'
-				particle.style.top = Math.random() * 100 + '%'
-				particle.style.animationDelay = Math.random() * 4 + 's'
-				particle.style.animationDuration = (Math.random() * 2 + 3) + 's'
-				container.appendChild(particle)
-			}
-		}
-		createParticles()
-
-		function createVisualizer() {
-			const visualizer = document.getElementById('visualizer')
-			const barCount = window.innerWidth < 768 ? 10 : 14
-			for (let i = 0; i < barCount; i++) {
-				const bar = document.createElement('div')
-				bar.className = 'visualizer-bar'
-				bar.style.height = '20px'
-				visualizer.appendChild(bar)
-			}
-		}
-		createVisualizer()
-
-		const audio = document.getElementById('audio')
-		const playBtn = document.getElementById('playBtn')
-		const playIcon = document.getElementById('playIcon')
-		const progressBar = document.getElementById('progressBar')
-		const currentTimeEl = document.getElementById('currentTime')
-		const durationEl = document.getElementById('duration')
-		const volumeSlider = document.getElementById('volumeSlider')
-		const volumeIcon = document.getElementById('volumeIcon')
-		const visualizer = document.getElementById('visualizer')
-		const lyricsContainer = document.getElementById('lyricsContainer')
-		const lyricLines = [
-			document.getElementById('lyricLine1'),
-			document.getElementById('lyricLine2'),
-			document.getElementById('lyricLine3')
-		]
-		
-		let isPlaying = false
-		let isMuted = false
-		let isUsingSimulator = false
-		let audioContext = null
-		let analyser = null
-		let dataArray = null
-		let animationId = null
-
-		const colors = [
-			'linear-gradient(to top, #ff006e, #ff8e8e)',
-			'linear-gradient(to top, #8338ec, #c084fc)',
-			'linear-gradient(to top, #06d6a0, #96e6a1)',
-			'linear-gradient(to top, #ffd166, #ffe59d)',
-			'linear-gradient(to top, #ef476f, #ff758f)',
-			'linear-gradient(to top, #118ab2, #06d6a0)',
-			'linear-gradient(to top, #7b2cbf, #9d4edd)',
-			'linear-gradient(to top, #ff9f1c, #ffbf69)',
-			'linear-gradient(to top, #ff006e, #f72585)',
-			'linear-gradient(to top, #3a0ca3, #4361ee)',
-			'linear-gradient(to top, #00f5d4, #90e0ef)',
-			'linear-gradient(to top, #fb5607, #ffbe0b)',
-			'linear-gradient(to top, #ff006e, #ffbe0b)',
-			'linear-gradient(to top, #8338ec, #06d6a0)',
-			'linear-gradient(to top, #ef476f, #7b2cbf)',
-			'linear-gradient(to top, #118ab2, #ffd166)'
-		]
-
-		const lyrics = [
-			{ time: 0, text: '所有的记忆都是潮湿的' },
-			{ time: 5, text: '就像未干的泪痕' },
-			{ time: 10, text: '永远停留在那个下雨的夜晚' },
-			{ time: 15, text: '每一张照片都是一段故事' },
-			{ time: 20, text: '记录着那些无法言说的悲伤' },
-			{ time: 25, text: '与美丽' },
-			{ time: 30, text: '破碎的梦' },
-			{ time: 35, text: '在黑暗中独自绽放' }
-		]
-
-		function initAudioContext() {
-			if (audioContext) {
-				if (audioContext.state === 'suspended') {
-					audioContext.resume()
-				}
-				return
-			}
-			
-			try {
-				audioContext = new (window.AudioContext || window.webkitAudioContext)()
-				analyser = audioContext.createAnalyser()
-				analyser.fftSize = 256
-				analyser.smoothingTimeConstant = 0.8
-				
-				const source = audioContext.createMediaElementSource(audio)
-				source.connect(analyser)
-				analyser.connect(audioContext.destination)
-				
-				dataArray = new Uint8Array(analyser.frequencyBinCount)
-				console.log('AudioContext初始化成功，频谱条数:', analyser.frequencyBinCount)
-			} catch (e) {
-				console.log('AudioContext初始化失败:', e)
-				isUsingSimulator = true
-			}
-		}
-
-		function updateVisualizer() {
-			if (!isPlaying) return
-			
-			const bars = visualizer.children
-			const time = Date.now()
-			
-			if (analyser && !isUsingSimulator) {
-				try {
-					analyser.getByteFrequencyData(dataArray)
-					
-					for (let i = 0; i < bars.length; i++) {
-						const freqIndex = Math.floor(i * analyser.frequencyBinCount / bars.length)
-						const value = dataArray[freqIndex] || dataArray[i] || 0
-						const height = Math.max(8, (value / 255) * 100)
-						const colorIndex = (i + Math.floor(time / 500)) % colors.length
-						const color = colors[colorIndex]
-						
-						bars[i].style.height = height + 'px'
-						bars[i].style.background = color
-						bars[i].style.borderRadius = height > 50 ? '6px 6px 3px 3px' : '3px'
-						
-						if (height > 60) {
-							bars[i].style.boxShadow = `0 0 ${height/2}px ${color}, 0 0 ${height}px ${color}, inset 0 -2px 4px rgba(0,0,0,0.2)`
-							bars[i].style.filter = 'brightness(1.2)'
-						} else if (height > 30) {
-							bars[i].style.boxShadow = `0 0 ${height/3}px ${color}, 0 0 ${height/2}px ${color}`
-							bars[i].style.filter = 'brightness(1.1)'
-						} else {
-							bars[i].style.boxShadow = `0 0 ${height/4}px ${color}`
-							bars[i].style.filter = 'brightness(1)'
-						}
-					}
-				} catch (e) {
-					console.log('音频分析失败:', e)
-					isUsingSimulator = true
-				}
-			} else {
-				for (let i = 0; i < bars.length; i++) {
-					const baseHeight = 30 + Math.sin(time / 200 + i * 0.5) * 20
-					const randomHeight = Math.random() * 50
-					const height = Math.max(8, baseHeight + randomHeight)
-					const colorIndex = (i + Math.floor(time / 500)) % colors.length
-					const color = colors[colorIndex]
-					
-					bars[i].style.height = height + 'px'
-					bars[i].style.background = color
-					bars[i].style.borderRadius = height > 50 ? '6px 6px 3px 3px' : '3px'
-					
-					if (height > 60) {
-						bars[i].style.boxShadow = `0 0 ${height/2}px ${color}, 0 0 ${height}px ${color}, inset 0 -2px 4px rgba(0,0,0,0.2)`
-					} else {
-						bars[i].style.boxShadow = `0 0 ${height/3}px ${color}`
-					}
-				}
-			}
-			
-			animationId = requestAnimationFrame(updateVisualizer)
-		}
-
-		function updateLyrics() {
-			const currentTime = audio.currentTime
-			let currentIndex = -1
-			
-			for (let i = 0; i < lyrics.length; i++) {
-				if (currentTime >= lyrics[i].time) {
-					currentIndex = i
-				}
-			}
-			
-			if (currentIndex >= 0) {
-				const prevIndex = currentIndex - 1
-				const nextIndex = currentIndex + 1
-				
-				lyricLines[0].textContent = prevIndex >= 0 ? lyrics[prevIndex].text : ''
-				lyricLines[1].textContent = lyrics[currentIndex].text
-				lyricLines[2].textContent = nextIndex < lyrics.length ? lyrics[nextIndex].text : ''
-				
-				lyricLines.forEach((line, index) => {
-					line.classList.remove('active')
-				})
-				lyricLines[1].classList.add('active')
-			}
-		}
-
-		function togglePlay() {
-			if (isPlaying) {
-				audio.pause()
-				playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'
-				playBtn.classList.remove('playing')
-				visualizer.classList.remove('active')
-				lyricsContainer.classList.remove('active')
-				if (animationId) {
-					cancelAnimationFrame(animationId)
-				}
-				isPlaying = false
-			} else {
-				isPlaying = true
-				initAudioContext()
-				audio.play()
-				playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
-				playBtn.classList.add('playing')
-				visualizer.classList.add('active')
-				lyricsContainer.classList.add('active')
-				updateVisualizer()
-			}
-		}
-
-		function toggleMute() {
-			if (isMuted) {
-				audio.muted = false
-				volumeIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>'
-				volumeSlider.style.setProperty('--volume', '70%')
-			} else {
-				audio.muted = true
-				volumeIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'
-				volumeSlider.style.setProperty('--volume', '0%')
-			}
-			isMuted = !isMuted
-		}
-
-		function setVolume(event) {
-			const rect = volumeSlider.getBoundingClientRect()
-			const x = event.clientX - rect.left
-			const volume = Math.min(Math.max(x / rect.width, 0), 1)
-			audio.volume = volume
-			volumeSlider.style.setProperty('--volume', (volume * 100) + '%')
-			isMuted = volume === 0
-		}
-
-		function seek(event) {
-			const rect = progressBar.parentElement.getBoundingClientRect()
-			const x = event.clientX - rect.left
-			const percent = Math.min(Math.max(x / rect.width, 0), 1)
-			audio.currentTime = percent * audio.duration
-		}
-
-		function formatTime(seconds) {
-			const mins = Math.floor(seconds / 60)
-			const secs = Math.floor(seconds % 60)
-			return `${mins}:${secs.toString().padStart(2, '0')}`
-		}
-
-		audio.addEventListener('timeupdate', () => {
-			const progress = (audio.currentTime / audio.duration) * 100
-			progressBar.style.width = progress + '%'
-			currentTimeEl.textContent = formatTime(audio.currentTime)
-			updateLyrics()
-		})
-
-		audio.addEventListener('loadedmetadata', () => {
-			durationEl.textContent = formatTime(audio.duration)
-		})
-
-		audio.addEventListener('ended', () => {
-			isPlaying = false
-			playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'
-			playBtn.classList.remove('playing')
-			document.getElementById('visualizer').style.opacity = '0.3'
-		})
-	</script>
-
-	<script>
-		var RENDERER = {
-			INIT_CHERRY_BLOSSOM_COUNT: 30,
-			MAX_ADDING_INTERVAL: 10,
-
+    </script>
+    <script type="text/javascript">
+		var Canvas = {}
+		Canvas.anim = {
 			init: function () {
-				this.setParameters();
-				this.reconstructMethods();
-				this.createCherries();
-				this.render();
-				if (navigator.userAgent.match(/(phone|pod|iPhone|iPod|ios|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
-					var box = document.querySelectorAll('.box')[0];
-				}
+				var canvas = document.getElementById('canvas')
+				canvas.width = window.innerWidth
+				canvas.height = window.innerHeight
+				//设置画布
+				this.ctx = canvas.getContext('2d')
+				this.letters = '*******************'
+				this.cw = canvas.width //获取画布宽
+				this.ch = canvas.height //获取画布高
+				this.particles = []
 			},
-			setParameters: function () {
-				this.$container = $('body');
-				this.width = this.$container.width();
-				this.height = this.$container.height();
-				this.context = $('#myCan').attr({ width: this.width, height: this.height })
-					.appendTo(this.$container)
-					.get(0)
-					.getContext('2d');
-				this.cherries = [];
-				this.maxAddingInterval = Math.round((this.MAX_ADDING_INTERVAL * 1000) / this.width);
-				this.addingInterval = this.maxAddingInterval;
-			},
-			reconstructMethods: function () {
-				this.render = this.render.bind(this);
-			},
-			createCherries: function () {
-				for (var i = 0, length = Math.round((this.INIT_CHERRY_BLOSSOM_COUNT * this.width) / 1000); i < length; i++) {
-					this.cherries.push(new CHERRY_BLOSSOM(this, true));
-				}
-			},
+			//执行动画
 			render: function () {
-				requestAnimationFrame(this.render);
-				this.context.clearRect(0, 0, this.width, this.height);
-
-				this.cherries.sort(function (cherry1, cherry2) {
-					return cherry1.z - cherry2.z;
-				});
-				for (var i = this.cherries.length - 1; i >= 0; i--) {
-					if (!this.cherries[i].render(this.context)) {
-						this.cherries.splice(i, 1);
-					}
+				this.ctx.clearRect(0, 0, this.cw, this.ch)
+				//字母的属性
+				//设置x轴中心点
+				var particle = {
+					x: this.cw / 2,
+					y: this.ch,
+					xSpeed: Math.random() * 20 - 10,
+					ySpeed: Math.random() * 20 - 10,
+					size: 10,
+					character: this.letters[
+						Math.floor(Math.random() * this.letters.length)
+					],
+					/*color:[155, 100, 50, .7]*/
+					color: function getRandomColor() {
+						return (
+							'#' +
+							(function (color) {
+								return (color += '0123456789abcdef'[
+									Math.floor(Math.random() * 16)
+								]) && color.length == 6
+									? color
+									: arguments.callee(color)
+							})('')
+						)
+					},
 				}
-				if (--this.addingInterval == 0) {
-					this.addingInterval = this.maxAddingInterval;
-					this.cherries.push(new CHERRY_BLOSSOM(this, false));
-				}
-			}
-		};
-		var CHERRY_BLOSSOM = function (renderer, isRandom) {
-			this.renderer = renderer;
-			this.init(isRandom);
-		};
-		CHERRY_BLOSSOM.prototype = {
-			FOCUS_POSITION: 300,
-			FAR_LIMIT: 600,
-			MAX_RIPPLE_COUNT: 100,
-			RIPPLE_RADIUS: 100,
-			SURFACE_RATE: 0.5,
-			SINK_OFFSET: 20,
-
-			init: function (isRandom) {
-				this.x = this.getRandomValue(-this.renderer.width, this.renderer.width);
-				this.y = isRandom ? this.getRandomValue(0, this.renderer.height) : this.renderer.height * 1.5;
-				this.z = this.getRandomValue(0, this.FAR_LIMIT);
-				this.vx = this.getRandomValue(-2, 2);
-				this.vy = -2;
-				this.theta = this.getRandomValue(0, Math.PI * 2);
-				this.phi = this.getRandomValue(0, Math.PI * 2);
-				this.psi = 0;
-				this.dpsi = this.getRandomValue(Math.PI / 600, Math.PI / 300);
-				this.opacity = 0;
-				this.endTheta = false;
-				this.endPhi = false;
-				this.rippleCount = 0;
-
-				var axis = this.getAxis(),
-					theta = this.theta + (Math.ceil(-(this.y + this.renderer.height * this.SURFACE_RATE) / this.vy) * Math.PI) / 500;
-				theta %= Math.PI * 2;
-
-				this.offsetY = 40 * (theta <= Math.PI / 2 || theta >= (Math.PI * 3) / 2 ? -1 : 1);
-				this.thresholdY = this.renderer.height / 2 + this.renderer.height * this.SURFACE_RATE * axis.rate;
-				this.entityColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
-				this.entityColor.addColorStop(0, 'hsla(330, 70%, ' + 50 * (0.3 + axis.rate) + '%, 0.8)');
-				this.entityColor.addColorStop(0.05, 'hsla(330, 40%,' + 55 * (0.3 + axis.rate) + '%, 0.6)');
-				this.entityColor.addColorStop(1, 'hsla(330, 20%, ' + 70 * (0.3 + axis.rate) + '%, 0.3)');
-				this.shadowColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
-				this.shadowColor.addColorStop(0, 'hsla(330, 40%, ' + 30 * (0.3 + axis.rate) + '%, 0.5)');
-				this.shadowColor.addColorStop(0.05, 'hsla(330, 40%,' + 30 * (0.3 + axis.rate) + '%, 0.4)');
-				this.shadowColor.addColorStop(1, 'hsla(330, 20%, ' + 40 * (0.3 + axis.rate) + '%, 0.2)');
+				this.particles.push(particle)
+				this.drawParticle()
 			},
-			getRandomValue: function (min, max) {
-				return min + (max - min) * Math.random();
+			//绘制字母
+			drawParticle: function () {
+				var c = this.ctx
+				var particleCount = this.particles.length
+				for (var i = 0; i < particleCount; i++) {
+					var particle = this.particles[i]
+					//设置颜色hsla值
+					var h = particle.color[0],
+						s = particle.color[1] + '%',
+						l = particle.color[2] + '%',
+						a = particle.color[3]
+					var hsla = 'hsla(' + h + ',' + s + ',' + l + ',' + a + ')'
+					//设置颜色文字
+					c.font = '12px sans-serif'
+					c.fillStyle = particle.color()
+					c.fillText(particle.character, particle.x, particle.y)
+					//设置运动轨迹
+					particle.x += particle.xSpeed
+					particle.y += particle.ySpeed
+					particle.y *= 0.98
+					//document.body.style.backgroundColor = particle.color();
+				}
+				this.fadeParticle()
 			},
-			getAxis: function () {
-				var rate = this.FOCUS_POSITION / (this.z + this.FOCUS_POSITION),
-					x = this.renderer.width / 2 + this.x * rate,
-					y = this.renderer.height / 2 - this.y * rate;
-				return { rate: rate, x: x, y: y };
+			//背景透明
+			fadeParticle: function () {
+				this.ctx.fillStyle = particle.color()
+				this.ctx.fillRect(0, 0, this.cw, this.ch)
 			},
-			renderCherry: function (context, axis) {
-				context.beginPath();
-				context.moveTo(0, 40);
-				context.bezierCurveTo(-60, 20, -10, -60, 0, -20);
-				context.bezierCurveTo(10, -60, 60, 20, 0, 40);
-				context.fill();
-
-				for (var i = -4; i < 4; i++) {
-					context.beginPath();
-					context.moveTo(0, 40);
-					context.quadraticCurveTo(i * 12, 10, i * 4, -24 + Math.abs(i) * 2);
-					context.stroke();
-				}
-			},
-			render: function (context) {
-				var axis = this.getAxis();
-
-				if (axis.y == this.thresholdY && this.rippleCount < this.MAX_RIPPLE_COUNT) {
-					context.save();
-					context.lineWidth = 2;
-					context.strokeStyle = 'hsla(0, 0%, 100%, ' + (this.MAX_RIPPLE_COUNT - this.rippleCount) / this.MAX_RIPPLE_COUNT + ')';
-					context.translate(axis.x + this.offsetY * axis.rate * (this.theta <= Math.PI ? -1 : 1), axis.y);
-					context.scale(1, 0.3);
-					context.beginPath();
-					context.arc(0, 0, (this.rippleCount / this.MAX_RIPPLE_COUNT) * this.RIPPLE_RADIUS * axis.rate, 0, Math.PI * 2, false);
-					context.stroke();
-					context.restore();
-					this.rippleCount++;
-				}
-				if (axis.y < this.thresholdY || !this.endTheta || !this.endPhi) {
-					if (this.y <= 0) {
-						this.opacity = Math.min(this.opacity + 0.01, 1);
-					}
-					context.save();
-					context.globalAlpha = this.opacity;
-					context.fillStyle = this.shadowColor;
-					context.strokeStyle = 'hsla(330, 30%,' + 40 * (0.3 + axis.rate) + '%, 0.6)';
-					context.translate(axis.x, Math.max(axis.y, this.thresholdY + this.thresholdY - axis.y));
-					context.rotate(Math.PI - this.theta);
-					context.scale(axis.rate * -Math.sin(this.phi), axis.rate);
-					context.translate(0, this.offsetY);
-					this.renderCherry(context, axis);
-					context.restore();
-				}
-				context.save();
-				context.fillStyle = this.entityColor;
-				context.strokeStyle = 'hsla(330, 40%,' + 70 * (0.3 + axis.rate) + '%, 0.8)';
-				context.translate(axis.x, axis.y + Math.abs(this.SINK_OFFSET * Math.sin(this.psi) * axis.rate));
-				context.rotate(this.theta);
-				context.scale(axis.rate * Math.sin(this.phi), axis.rate);
-				context.translate(0, this.offsetY);
-				this.renderCherry(context, axis);
-				context.restore();
-
-				if (this.y <= -this.renderer.height / 4) {
-					if (!this.endTheta) {
-						for (var theta = Math.PI / 2, end = (Math.PI * 3) / 2; theta <= end; theta += Math.PI) {
-							if (this.theta < theta && this.theta + Math.PI / 200 > theta) {
-								this.theta = theta;
-								this.endTheta = true;
-								break;
-							}
-						}
-					}
-					if (!this.endPhi) {
-						for (var phi = Math.PI / 8, end = (Math.PI * 7) / 8; phi <= end; phi += (Math.PI * 3) / 4) {
-							if (this.phi < phi && this.phi + Math.PI / 200 > phi) {
-								this.phi = Math.PI / 8;
-								this.endPhi = true;
-								break;
-							}
-						}
-					}
-				}
-				if (!this.endTheta) {
-					if (axis.y == this.thresholdY) {
-						this.theta += (Math.PI / 200) * (this.theta < Math.PI / 2 || (this.theta >= Math.PI && this.theta < (Math.PI * 3) / 2) ? 1 : -1);
-					} else {
-						this.theta += Math.PI / 500;
-					}
-					this.theta %= Math.PI * 2;
-				}
-				if (this.endPhi) {
-					if (this.rippleCount == this.MAX_RIPPLE_COUNT) {
-						this.psi += this.dpsi;
-						this.psi %= Math.PI * 2;
-					}
-				} else {
-					this.phi += Math.PI / (axis.y == this.thresholdY ? 200 : 500);
-					this.phi %= Math.PI;
-				}
-				if (this.y <= -this.renderer.height * this.SURFACE_RATE) {
-					this.x += 2;
-					this.y = -this.renderer.height * this.SURFACE_RATE;
-				} else {
-					this.x += this.vx;
-					this.y += this.vy;
-				}
-				return (this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5);
-			}
-		};
-		$(function () {
-			RENDERER.init();
-		});
+		}
+		Canvas.anim.init()
+		setInterval(function () {
+			Canvas.anim.render()
+		}, 20)
 	</script>
-</body>
+  
+  <!-- 嵌入式粉色心形气泡特效 -->
+  <div id="girly-embed" style="width:100%; max-width:720px; height:420px; margin:20px auto; border-radius:16px; overflow:hidden; position:relative; background: radial-gradient(circle at 20% -10%, rgba(255, 122, 183, .5), transparent 40%), radial-gradient(circle at 80% 0, rgba(255, 180, 210, .25), transparent 40%), linear-gradient(135deg, #2b0a1e 0%, #0b0b14 60%, #0b0b14 100%);">
+    <div id="girly-heart-zone" style="position:absolute; left:0; right:0; top:40px; bottom:0;">
+        <!-- 浮动感动人文字容器 -->
+        <div class="heart-messages-container" id="messages-container"></div>
+    </div>
+  </div>
+  
+  <style>
+  @keyframes embedFloatHeart { 0% { transform: translateY(0) translateX(0) scale(0.9); opacity:0; } 15% { opacity:1; } 100% { transform: translateY(-520px) translateX(var(--dx)); opacity:0; } }
+  </style>
+  
+  <script>
+  // 感动人心的文字列表
+  const comfortingMessages = [
+    "❤️ 你并不孤单，这世界总有爱你的人",
+    "✨ 每一个明天都有新的希望，新的开始",
+    "🌌 星星为你闪烁，月亮为你温柔",
+    "🌻 你比自己想象的更坚强，更勇敢",
+    "🌸 伤口总会愈合，时间是最好的良药",
+    "💫 你的存在本身，就是一份珍贵的礼物",
+    "🕊️ 放过自己，你已经足够努力了",
+    "🌙 黑夜再长，黎明终会到来",
+    "🌟 不必完美，真实的你最有魅力",
+    "🌊 让过去的就过去，未来可期",
+    "🌹 你值得所有的美好与温柔",
+    "☀️ 今天会是美好的一天，我为你加油",
+    "🌿 慢慢来，一切都会好起来的",
+    "💕 爱你的人，希望你快乐",
+    "🌼 做你自己，就是最美的风景",
+    "🦋 蜕变需要时间，你已经走在路上",
+    "🌈 风雨过后，必有彩虹",
+    "🌺 你的微笑，是世界上最美的风景",
+    "🌲 扎根需要时间，成长需要耐心",
+    "🌅 今天的太阳，为全新的你升起"
+  ];
+  
+  // 生成浮动文字
+  function createHeartMessage() {
+    const container = document.getElementById('messages-container');
+    if (!container) return;
+    
+    const message = document.createElement('div');
+    message.className = 'heart-message';
+    
+    // 随机选择一条信息
+    const text = comfortingMessages[Math.floor(Math.random() * comfortingMessages.length)];
+    message.textContent = text;
+    
+    // 随机位置
+    const zoneRect = document.getElementById('girly-heart-zone').getBoundingClientRect();
+    const x = Math.random() * (zoneRect.width - 250) + 20;
+    const y = zoneRect.height;
+    
+    message.style.left = `${x}px`;
+    message.style.top = '10%';
+    
+    // 随机颜色渐变
+    const gradients = [
+        'linear-gradient(135deg, rgba(255, 122, 183, 0.3), rgba(255, 180, 210, 0.2))',
+        'linear-gradient(135deg, rgba(255, 180, 210, 0.3), rgba(255, 122, 183, 0.2))',
+        'linear-gradient(135deg, rgba(255, 107, 179, 0.3), rgba(255, 142, 200, 0.2))',
+        'linear-gradient(135deg, rgba(255, 77, 136, 0.3), rgba(255, 153, 204, 0.2))'
+    ];
+    message.style.background = gradients[Math.floor(Math.random() * gradients.length)];
+    
+    // 点击时放大
+    message.addEventListener('click', function() {
+        this.style.transform = 'scale(1.2)';
+        this.style.opacity = '1';
+        setTimeout(() => {
+            this.remove();
+        }, 500);
+    });
+    
+    container.appendChild(message);
+    
+    // 动画结束后移除
+    setTimeout(() => {
+        message.remove();
+    }, 6000);
+  }
+  
+  // 心形漂浮特效
+  (function(){
+    var zone = document.getElementById('girly-heart-zone');
+    if(!zone) return;
+    
+    function spawnHeart(){
+      var w = zone.clientWidth;
+      var left = Math.max(8, Math.min(w - 28, Math.random()*(w - 28)));
+      var dx = (Math.random()*360) - 180;
+      var duration = 3500 + Math.random()*6000;
+      var svgNS = "http://www.w3.org/2000/svg";
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox','0 0 24 24');
+      svg.setAttribute('width','28');
+      svg.setAttribute('height','28');
+      svg.style.position = 'absolute';
+      svg.style.left = left+'px';
+      svg.style.bottom = '-40px';
+      var defs = document.createElementNS(svgNS, 'defs');
+      var grad = document.createElementNS(svgNS, 'linearGradient');
+      var gradId = 'grad_embed_'+Date.now();
+      grad.setAttribute('id', gradId);
+      var s1 = document.createElementNS(svgNS, 'stop');
+      s1.setAttribute('offset','0%');
+      s1.setAttribute('stop-color','#ff7ab7');
+      var s2 = document.createElementNS(svgNS, 'stop');
+      s2.setAttribute('offset','100%');
+      s2.setAttribute('stop-color','#ffd1e8');
+      grad.appendChild(s1); grad.appendChild(s2);
+      defs.appendChild(grad);
+      svg.appendChild(defs);
+      var path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d','M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.99 4.5 2.09C12.99 4.99 14.66 4 16.5 4 19 4 21 6 21 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+      path.setAttribute('fill','url(#'+gradId+')');
+      svg.appendChild(path);
+      zone.appendChild(svg);
+      svg.style.setProperty('--dx', dx+'px');
+      svg.style.animation = 'embedFloatHeart '+ duration +'ms linear forwards';
+      setTimeout(function(){ svg.remove(); }, duration+100);
+    }
+    
+    // 点击嵌入区触发心形漂浮和文字
+    document.getElementById('girly-embed').addEventListener('click', function() {
+        spawnHeart();
+        if (Math.random() > 0.7) { // 30%几率同时生成文字
+            createHeartMessage();
+        }
+    });
+    
+    setInterval(spawnHeart, 500);
+    setInterval(createHeartMessage, 3000); // 每3秒生成一条感动文字
+  })();
+  </script>
+
 </html>
