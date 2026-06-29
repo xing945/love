@@ -462,6 +462,7 @@
         }
 
         function fireworks() {
+            $('.container').remove();
             $('.page_one').addClass('hide');
             $('.page_two').removeClass('hide');
             $('.page_two').fireworks({
@@ -482,7 +483,7 @@
                 '</div>' +
                 '</div>';
             $('body').append(tpl);
-            $(document).on('click touchstart', '.confirm', function (event) {
+            $(document).off('click touchstart', '.confirm').on('click touchstart', '.confirm', function (event) {
                 event.preventDefault();
                 $('.container').remove();
                 callback();
