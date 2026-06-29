@@ -356,7 +356,6 @@
         .page_one {
             position: relative;
             z-index: 5;
-            min-height: 100vh;
             animation: fadeIn 1s ease-in;
         }
 
@@ -462,10 +461,12 @@
             return true
         }
         $(function () {
-            $('#yes').click(function (event) {
+            $('#yes').on('click touchstart', function (event) {
+                event.preventDefault();
                 modal('✨ 你就是我的意外！从未想过会遇见你但是我遇到了。这一定是冥冥中的天意！无论我们最终什么样，你都将是我生命中重要的一部分！✨', AA);
             });
-            $('#no').click(function (event) {
+            $('#no').on('click touchstart', function (event) {
+                event.preventDefault();
                 modal('💝 我能给你的实在不多，所以我想把这辈子最单纯的喜欢和守护还有数不尽的温柔都给你。', AA);
             });
         });
@@ -532,7 +533,8 @@
                 '</div>' +
                 '</div>';
             $('body').append(tpl);
-            $(document).on('click', '.confirm', function () {
+            $(document).on('click touchstart', '.confirm', function (event) {
+                event.preventDefault();
                 $('.container').remove();
                 callback();
             });
