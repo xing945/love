@@ -64,8 +64,7 @@
         }
 
         .text_wrapper .text {
-            padding-top: 20px;
-            padding-left: 20px;
+            padding-top: 10px;
         }
 
         .text_wrapper img {
@@ -285,9 +284,7 @@
         <div class="content">
             <div class="text_wrapper">
                 <img src="./image.png" alt="" style="width:100%;height:350px;">
-                <div class="text" style="font-size:20px;font-weight:bold;color:red;text-align:center;">
-
-                </div>
+                <div class="text" style="font-size:16px;font-weight:bold;color:red;text-align:center;"></div>
             </div>
         </div>
         <div class="btn-groups">
@@ -336,7 +333,7 @@
             var minute = parseInt((time % 3600) / 60) // 分 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
             var second = parseInt(time % 60) // 以60秒为一整份 取余 剩下秒数
             obj.innerHTML =
-                '咱俩认识的时间已经<br>' +
+                '咱俩认识的时间已经' +
                 day +
                 '天' +
                 hour +
