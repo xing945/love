@@ -366,22 +366,12 @@
     </div>
     <audio id="bgMusic" src="./1.mp3" autoplay="autoplay" loop></audio>
     </div>
-    <script>
+    <script type="text/javascript">
         var html = document.getElementsByTagName('html')[0]
         var bgMusic = document.getElementById('bgMusic')
         html.addEventListener('touchstart', function () {
             bgMusic.play()
         })
-        function toggleSound() {
-            if (bgMusic.paused) {
-                //判读是否播放
-                bgMusic.paused = false
-                bgMusic.play() //没有就播放
-            }
-        }
-        setInterval('toggleSound()', 1)
-    </script>
-    <script type="text/javascript">
         window.onload = function starttime() {
             const text = document.getElementsByClassName('text')[0];
             time(text, '2026-06-11') // 在一起的时间
@@ -511,9 +501,6 @@
             }
         }
 
-    </script>
-    <!-- 玫瑰区域 -->
-    <script>  
         var rose = document.getElementsByClassName('rose')[0];
         var c = document.getElementById('roses');
         var opacity = getComputedStyle(rose).opacity;
