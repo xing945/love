@@ -266,49 +266,6 @@
             }
         }
 
-        /* 移动端适配 */
-        @media (max-width: 480px) {
-            .btn {
-                width: 70px;
-                height: 70px;
-                margin: 0 30px;
-            }
-
-            .btn span {
-                line-height: 70px;
-                font-size: 14px;
-            }
-
-            .btn-a:before,
-            .btn-b:before {
-                width: 35px;
-                height: 70px;
-                left: -34px;
-                border-top-left-radius: 70px;
-                border-bottom-left-radius: 70px;
-            }
-
-            .btn-a:after,
-            .btn-b:after {
-                width: 70px;
-                height: 35px;
-                top: -34px;
-                border-top-left-radius: 70px;
-                border-top-right-radius: 70px;
-            }
-
-            .container .modal {
-                padding: 20px 15px;
-            }
-
-            .container .modal p {
-                font-size: 15px;
-            }
-
-            .content {
-                padding: 10px;
-            }
-        }
     </style>
 
     <style>
@@ -462,11 +419,11 @@
             return true
         }
         $(function () {
-            $('#yes').on('click touchstart', function (event) {
+            $('#yes').on('touchstart', function (event) {
                 event.preventDefault();
                 modal('✨ 你就是我的意外！从未想过会遇见你但是我遇到了。这一定是冥冥中的天意！无论我们最终什么样，你都将是我生命中重要的一部分！✨', AA);
             });
-            $('#no').on('click touchstart', function (event) {
+            $('#no').on('touchstart', function (event) {
                 event.preventDefault();
                 modal('💝 我能给你的实在不多，所以我想把这辈子最单纯的喜欢和守护还有数不尽的温柔都给你。', AA);
             });
